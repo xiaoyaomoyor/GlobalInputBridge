@@ -1,0 +1,36 @@
+{
+	"FileVersion": 3,
+	"Version": 100,
+	"VersionName": "1.0.0",
+	"EngineVersion": "5.7.0",
+	"FriendlyName": "Global Input Bridge",
+	"Description": "A lightweight Windows input bridge providing focus-independent global keyboard and mouse events and state for Unreal Engine workflows",
+	"Category": "Input",
+	"CreatedBy": "xiaoyaomoyor",
+	"CreatedByURL": "https://github.com/xiaoyaomoyor",
+	"DocsURL": "https://github.com/xiaoyaomoyor/global-input-bridge",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/xiaoyaomoyor/global-input-bridge/issues",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "GlobalInputBridge",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		},
+		{
+			"Name": "GlobalInputBridgeEditor",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64"
+			]
+		}
+	]
+}

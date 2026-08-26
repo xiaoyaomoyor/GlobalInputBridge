@@ -1,0 +1,10 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Binary assets
+*.png binary
+*.ico binary
+*.dll binary
+*.pdb binary
+*.uasset binary
+*.umap binary
