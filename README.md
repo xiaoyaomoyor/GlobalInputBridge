@@ -1,16 +1,13 @@
 # Global Input Bridge
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
-[![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/stargazers)
-[![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/network/members)
-[![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com) [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
+[![Version](https://img.shields.io/badge/Version-1.0.1-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
+
+> **Vibe-Coding Disclosure**: The development of this plugin was assisted by AI-assisted programming (vibe coding).
 
 **English** | [简体中文](README.zh-CN.md)
 
-Global Input Bridge is a lightweight Windows input plugin for Unreal Engine that delivers **focus-independent global keyboard and mouse input** to the game thread — even when your UE application is in the background.
+Global Input Bridge is a feature-rich Windows input plugin for Unreal Engine that delivers **focus-independent global keyboard and mouse input** to the game thread — even when your UE application is in the background.
 
 It is built for workflows where UE is a companion app running behind a foreground program: **virtual avatar streaming** (mirroring aim and movement while playing an FPS), macro panels, input analytics, overlay tools, and similar scenarios.
 
@@ -40,20 +37,35 @@ The plugin is a passive input *reader*: it never injects or synthesizes input, a
 ## Installation
 
 1. Clone or download this repository into your project:
+
    ```
    <YourProject>/Plugins/GlobalInputBridge
    ```
+
 2. Regenerate project files and compile (or simply launch the project and let the editor build the plugin).
 3. Enable the plugin if prompted. Settings live in `Project Settings > Plugins > Global Input Bridge`.
 
 ## Quick Start (Blueprint)
 
+> The plugin ships a DemoMap in its Content folder — open it to see blueprint examples for every feature below.
+
 1. Get the subsystem with `Get Engine Subsystem` → `GlobalInputSubsystem`.
+
+   ![Start Listening](Images/GlobalInputBridge_Shot01.png)
+
 2. Either enable **Auto Start** in the settings or call `Start Listening` yourself (Commandlets and dedicated servers never auto-start).
 3. For continuous behavior, query `Is Global Key Down`.
 4. For one-shot behavior, query `Was Global Key Pressed This Frame` / `Was Global Key Released This Frame`.
+
+   ![Key State Queries](Images/GlobalInputBridge_Shot04.png)
+
 5. For mouse aim, read `Get Global Mouse Delta` every tick or bind `On Global Mouse Move`.
+
+   ![Mouse Delta](Images/GlobalInputBridge_Shot03.png)
+
 6. Add the purple **Global Input Action Event** node for key actions; configure Key, Modifiers, and the optional `Exact Modifiers (Exclusive)` in Details.
+
+   ![Global Input Action Event](Images/GlobalInputBridge_Shot02.png)
 
 A typical aim-mirroring setup: accumulate `Get Global Mouse Delta` each tick, scale by a sensitivity factor, and drive an Aim Offset. Raw Input deltas are device counts (no pointer acceleration), so tune the scale factor to taste.
 
@@ -83,6 +95,8 @@ Configurable in `Project Settings > Plugins > Global Input Bridge`:
 - `Exclude Mode = true`: Keys is an exclude-list; an empty array excludes nothing.
 
 Filtering never affects state queries, frame edges, or Global Input Action Event nodes. `Clear Global Input Event Filter` restores full broadcasting.
+
+![Event Filtering](Images/GlobalInputBridge_Shot05.png)
 
 ## Debugging
 

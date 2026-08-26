@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1] - 2026-08-27
+
+- Added a demo map (`Content/Demo/DemoMap`) with blueprint examples covering listening lifecycle, key state queries, mouse delta aim mirroring, the Global Input Action Event node, and event filtering.
+- Added demo assets (character, materials, game mode) used by the demo map.
+- Added screenshots to the documentation.
+- Updated repository links after the repository rename to `GlobalInputBridge`.
+- Documentation: bilingual README alignment, Vibe-Coding disclosure.
+
 ## [1.0.0] - 2026-08-26
 
 First open-source release.

@@ -1,16 +1,13 @@
 # Global Input Bridge 全局输入桥
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
-[![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen)](CHANGELOG.md)
-[![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/stargazers)
-[![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/network/members)
-[![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/global-input-bridge)](https://github.com/xiaoyaomoyor/global-input-bridge/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com) [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
+[![Version](https://img.shields.io/badge/Version-1.0.1-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
+
+> **Vibe-Coding 参与声明**：本插件的开发过程有 AI 辅助编程（Vibe Coding）参与。
 
 [English](README.md) | **简体中文**
 
-Global Input Bridge 是一个轻量级的 Unreal Engine Windows 输入插件，向游戏线程提供**不依赖窗口焦点的全局键盘与鼠标输入**——即使你的 UE 应用位于后台也能持续接收。
+Global Input Bridge 是一个功能丰富的 Unreal Engine Windows 输入插件，向游戏线程提供**不依赖窗口焦点的全局键盘与鼠标输入**——即使你的 UE 应用位于后台也能持续接收。
 
 它面向"UE 作为伴随程序运行在其他前台软件之后"的工作流：**虚拟主播直播**（玩 FPS 时同步虚拟角色的视角与移动）、宏面板、输入分析、覆盖层工具等场景。
 
@@ -40,20 +37,35 @@ Global Input Bridge 是一个轻量级的 Unreal Engine Windows 输入插件，�
 ## 安装
 
 1. 将本仓库克隆或下载到你的项目中：
+
    ```
    <YourProject>/Plugins/GlobalInputBridge
    ```
+
 2. 重新生成工程文件并编译（或直接启动工程让编辑器编译插件）。
 3. 如有提示则启用插件。配置入口：`Project Settings > Plugins > Global Input Bridge`。
 
 ## 快速上手（蓝图）
 
+> 插件内容含有 DemoMap，可打开关卡查看蓝图示例。
+
 1. 用 `Get Engine Subsystem` 获取 `GlobalInputSubsystem`。
+
+   ![Start Listening](Images/GlobalInputBridge_Shot01.png)
+
 2. 在设置中开启 **Auto Start**，或自行调用 `Start Listening`（Commandlet 与专用服务器永不自动启动）。
 3. 持续行为查询 `Is Global Key Down`。
 4. 一次性行为查询 `Was Global Key Pressed This Frame` / `Was Global Key Released This Frame`。
+
+   ![Key State Queries](Images/GlobalInputBridge_Shot04.png)
+
 5. 鼠标视角每 Tick 读取 `Get Global Mouse Delta`，或绑定 `On Global Mouse Move`。
+
+   ![Mouse Delta](Images/GlobalInputBridge_Shot03.png)
+
 6. 按键动作直接添加紫色 **Global Input Action Event** 节点，在 Details 中配置 Key、Modifiers 与可选的 `Exact Modifiers (Exclusive)`。
+
+   ![Global Input Action Event](Images/GlobalInputBridge_Shot02.png)
 
 典型的视角同步方案：每 Tick 累加 `Get Global Mouse Delta`，乘以灵敏度系数，驱动 Aim Offset。Raw Input 增量是设备计数（无指针加速），量级与鼠标上报的计数一致，按需调整缩放系数即可。
 
@@ -61,12 +73,12 @@ Global Input Bridge 是一个轻量级的 Unreal Engine Windows 输入插件，�
 
 在 `Project Settings > Plugins > Global Input Bridge` 中配置：
 
-| 模式 | 移动增量 | 按钮 | 桌面位置 | 说明 |
-|---|---|---|---|---|
-| `Raw Input`（默认） | 原始相对计数（`WM_INPUT`） | 轮询 | 轮询 | 锁鼠 FPS 中依然可用；与游戏消费的数据同源 |
-| `Polling` | 桌面像素差 | 轮询 | 轮询 | 桌面语义；锁鼠游戏中增量为零 |
-| `Buttons Only` | 无 | 轮询 | 不查询 | 永不广播 `On Global Mouse Move` |
-| `Disabled` | 无 | 不轮询 | 不查询 | 所有模式下键盘监听均不受影响 |
+| 模式               | 移动增量                   | 按钮   | 桌面位置 | 说明                                 |
+| ------------------ | -------------------------- | ------ | -------- | ------------------------------------ |
+| `Raw Input`（默认）| 原始相对计数（`WM_INPUT`） | 轮询   | 轮询     | 锁鼠 FPS 中依然可用；与游戏消费的数据同源 |
+| `Polling`          | 桌面像素差                 | 轮询   | 轮询     | 桌面语义；锁鼠游戏中增量为零           |
+| `Buttons Only`     | 无                         | 轮询   | 不查询   | 永不广播 `On Global Mouse Move`       |
+| `Disabled`         | 无                         | 不轮询 | 不查询   | 所有模式下键盘监听均不受影响           |
 
 ## 工作原理
 
@@ -83,6 +95,8 @@ Global Input Bridge 是一个轻量级的 Unreal Engine Windows 输入插件，�
 - `Exclude Mode = true`：Keys 为排除列表；空数组不排除任何按键。
 
 过滤不影响状态查询、帧边沿与 Global Input Action Event 节点。`Clear Global Input Event Filter` 恢复完整广播。
+
+![Event Filtering](Images/GlobalInputBridge_Shot05.png)
 
 ## 调试
 
