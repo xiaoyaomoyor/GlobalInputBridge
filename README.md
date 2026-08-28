@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com) [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
 [![Version](https://img.shields.io/badge/Version-1.0.1-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
-[![Build](https://github.com/xiaoyaomoyor/GlobalInputBridge/actions/workflows/build.yml/badge.svg)](https://github.com/xiaoyaomoyor/GlobalInputBridge/actions/workflows/build.yml)
 
 > **Vibe-Coding Disclosure**: The development of this plugin was assisted by AI-assisted programming (vibe coding).
 
