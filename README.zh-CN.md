@@ -1,7 +1,7 @@
 # Global Input Bridge 全局输入桥
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com) [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
-[![Version](https://img.shields.io/badge/Version-1.0.3-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
+[![Version](https://img.shields.io/badge/Version-1.0.4-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
 
 > **Vibe-Coding 参与声明**：本插件的开发过程有 AI 辅助编程（Vibe Coding）参与。
 
@@ -94,7 +94,7 @@ Global Input Bridge 是一个功能丰富的 Unreal Engine Windows 输入插件�
 - `Exclude Mode = false`（默认）：Keys 为允许列表；空数组停止所有按键事件广播。
 - `Exclude Mode = true`：Keys 为排除列表；空数组不排除任何按键。
 
-被过滤的按键不会广播事件，也无法触发新的动作（Started）；过滤前已激活动作不再触发 `Triggered`，但其 `Completed` 仍会正常发出，避免蓝图侧 Started 悬空。过滤不影响状态查询、帧边沿与修饰键状态——`Is Global Key Down` 等始终反映物理按键。状态轮询类逻辑（如移动镜像）若需要与过滤保持一致，配合 `Is Global Key Event Suppressed` 查询使用：`Is Global Key Down(Key) AND NOT Is Global Key Event Suppressed(Key)`。`Clear Global Input Event Filter` 恢复完整广播。
+被过滤的按键不会广播事件，也无法触发新的动作（Started）；过滤前已激活动作不再触发 `Triggered`，但其 `Completed` 仍会正常发出，避免蓝图侧 Started 悬空。状态查询默认始终反映物理按键（帧边沿与修饰键状态亦然）；轮询类逻辑（如移动镜像）若需要与过滤保持一致，勾选 `Is Global Key Down` / `Was Global Key Pressed This Frame` / `Get Pressed Global Keys` 上的 **Respect Event Filter** 复选框即可，被过滤的键将按未按下处理。`Was Global Key Released This Frame` 与修饰键状态刻意不受过滤——收尾信号永远放行，与 Completed 语义对齐。`Is Global Key Event Suppressed` 保留为通用构建块。`Clear Global Input Event Filter` 恢复完整广播。
 
 ![Event Filtering](Images/GlobalInputBridge_Shot05.png)
 

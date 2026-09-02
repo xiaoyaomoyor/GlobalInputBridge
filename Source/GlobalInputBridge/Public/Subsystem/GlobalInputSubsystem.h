@@ -78,21 +78,41 @@ public:
 		return bListening;
 	}
 
-	/** 查询键盘按键或鼠标按钮当前是否按下。 */
+	/**
+	 * 查询键盘按键或鼠标按钮当前是否按下。
+	 * 默认始终反映物理按键；勾选 Respect Event Filter 后，
+	 * 被事件过滤器拦截的键按未按下处理。
+	 */
 	UFUNCTION(BlueprintPure, Category="Global Input")
-	bool IsGlobalKeyDown(FKey Key) const;
+	bool IsGlobalKeyDown(
+		FKey Key,
+		bool bRespectEventFilter = false) const;
 
-	/** 本次 GlobalInputSubsystem Tick 中，聚合按键是否刚从 Up 变为 Down。 */
+	/**
+	 * 本次 GlobalInputSubsystem Tick 中，聚合按键是否刚从 Up 变为 Down。
+	 * 默认始终反映物理按键；勾选 Respect Event Filter 后，
+	 * 被事件过滤器拦截的键不会有帧边沿。
+	 */
 	UFUNCTION(BlueprintPure, Category="Global Input|State")
-	bool WasGlobalKeyPressedThisFrame(FKey Key) const;
+	bool WasGlobalKeyPressedThisFrame(
+		FKey Key,
+		bool bRespectEventFilter = false) const;
 
-	/** 本次 GlobalInputSubsystem Tick 中，聚合按键是否刚从 Down 变为 Up。 */
+	/**
+	 * 本次 GlobalInputSubsystem Tick 中，聚合按键是否刚从 Down 变为 Up。
+	 * 释放边沿不受事件过滤影响——与 Global Input Action 的 Completed
+	 * 语义对齐：收尾信号永远放行，避免消费方悬空。
+	 */
 	UFUNCTION(BlueprintPure, Category="Global Input|State")
 	bool WasGlobalKeyReleasedThisFrame(FKey Key) const;
 
-	/** 获取所有设备聚合后当前按下的键，结果按 FKey 名称稳定排序。 */
+	/**
+	 * 获取所有设备聚合后当前按下的键，结果按 FKey 名称稳定排序。
+	 * 勾选 Respect Event Filter 后，被事件过滤器拦截的键不会出现在结果中。
+	 */
 	UFUNCTION(BlueprintPure, Category="Global Input|State")
-	TArray<FKey> GetPressedGlobalKeys() const;
+	TArray<FKey> GetPressedGlobalKeys(
+		bool bRespectEventFilter = false) const;
 
 	/** 获取最近一次有效的 Windows 虚拟桌面光标坐标。 */
 	UFUNCTION(BlueprintPure, Category="Global Input|Mouse")

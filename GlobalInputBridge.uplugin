@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
-	"Version": 103,
-	"VersionName": "1.0.3",
+	"Version": 104,
+	"VersionName": "1.0.4",
 	"EngineVersion": "5.7.0",
 	"FriendlyName": "Global Input Bridge",
 	"Description": "A lightweight Windows input bridge providing focus-independent global keyboard and mouse events and state for Unreal Engine workflows",

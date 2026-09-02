@@ -339,9 +339,16 @@ void UGlobalInputSubsystem::StopListeningInternal(
 }
 
 bool UGlobalInputSubsystem::IsGlobalKeyDown(
-	FKey Key) const
+	FKey Key,
+	bool bRespectEventFilter) const
 {
 	if (!Impl || !Key.IsValid())
+	{
+		return false;
+	}
+
+	if (bRespectEventFilter &&
+		!ShouldBroadcastKeyEvent(Key))
 	{
 		return false;
 	}
@@ -350,10 +357,21 @@ bool UGlobalInputSubsystem::IsGlobalKeyDown(
 }
 
 bool UGlobalInputSubsystem::WasGlobalKeyPressedThisFrame(
-	FKey Key) const
+	FKey Key,
+	bool bRespectEventFilter) const
 {
-	return Impl &&
-		Impl->StateManager.WasKeyPressedThisFrame(Key);
+	if (!Impl || !Key.IsValid())
+	{
+		return false;
+	}
+
+	if (bRespectEventFilter &&
+		!ShouldBroadcastKeyEvent(Key))
+	{
+		return false;
+	}
+
+	return Impl->StateManager.WasKeyPressedThisFrame(Key);
 }
 
 bool UGlobalInputSubsystem::WasGlobalKeyReleasedThisFrame(
@@ -363,11 +381,27 @@ bool UGlobalInputSubsystem::WasGlobalKeyReleasedThisFrame(
 		Impl->StateManager.WasKeyReleasedThisFrame(Key);
 }
 
-TArray<FKey> UGlobalInputSubsystem::GetPressedGlobalKeys() const
+TArray<FKey> UGlobalInputSubsystem::GetPressedGlobalKeys(
+	bool bRespectEventFilter) const
 {
-	return Impl
-		? Impl->StateManager.GetPressedKeys()
-		: TArray<FKey>();
+	TArray<FKey> Keys;
+	if (!Impl)
+	{
+		return Keys;
+	}
+
+	Keys = Impl->StateManager.GetPressedKeys();
+
+	if (bRespectEventFilter)
+	{
+		Keys.RemoveAll(
+			[this](const FKey& Key)
+			{
+				return !ShouldBroadcastKeyEvent(Key);
+			});
+	}
+
+	return Keys;
 }
 
 FVector2D

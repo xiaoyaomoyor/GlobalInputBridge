@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.4] - 2026-09-02
+
+- **Added**: `Respect Event Filter` checkbox (default off) on `Is Global Key Down`, `Was Global Key Pressed This Frame`, and `Get Pressed Global Keys` — ticked, filtered keys read as not pressed, so polling-style consumers (e.g. movement mirroring) no longer need to combine nodes manually. Default behavior is unchanged: state queries keep reflecting physical input.
+- `Was Global Key Released This Frame` and modifier state intentionally ignore the filter: closing signals always flow, mirroring the Completed semantics of Global Input Action Events.
+
 ## [1.0.3] - 2026-09-02
 
 - **Added**: `Is Global Key Event Suppressed(FKey)` blueprint query — reports whether a key's events are currently blocked by the event filter. State queries (`Is Global Key Down` etc.) intentionally ignore the filter and always reflect physical input; polling-style consumers such as movement mirroring can combine `Is Global Key Down(Key) AND NOT Is Global Key Event Suppressed(Key)` to honor the filter without corrupting global key state.
