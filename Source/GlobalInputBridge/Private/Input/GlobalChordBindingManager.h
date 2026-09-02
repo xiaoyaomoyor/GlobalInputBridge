@@ -12,6 +12,14 @@
 class FInputStateManager;
 class UWorld;
 
+/** 编译期绑定一次回调所处的工作阶段。 */
+enum class EGlobalChordInvocationPhase : uint8
+{
+	Started,
+	Triggered,
+	Completed
+};
+
 /** A deferred blueprint callback produced while chord state is evaluated. */
 struct FGlobalChordInvocation
 {
@@ -19,6 +27,10 @@ struct FGlobalChordInvocation
 	FGuid BindingId;
 	FName FunctionName;
 	FGlobalChordEventInfo EventInfo;
+
+	/** 该回调对应的生命周期阶段，用于事件过滤时区分 Triggered 与 Completed。 */
+	EGlobalChordInvocationPhase Phase =
+		EGlobalChordInvocationPhase::Started;
 };
 
 /** Game-thread-only runtime state for compiled Global Input Action Event nodes. */
@@ -69,6 +81,7 @@ private:
 		const FRuntimeBinding& Binding,
 		FName FunctionName,
 		const FGlobalChordEventInfo& EventInfo,
+		EGlobalChordInvocationPhase Phase,
 		TArray<FGlobalChordInvocation>& OutInvocations);
 
 	void RemoveInvalidTargets();

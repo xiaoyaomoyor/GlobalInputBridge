@@ -125,7 +125,9 @@ public:
 	/**
 	 * 启用按键事件过滤。默认是允许列表；Exclude Mode 下是排除列表。
 	 * 允许列表的空数组不广播任何按键事件；排除列表的空数组不排除任何按键。
-	 * 过滤仅影响 OnGlobalKeyEvent；状态查询、帧边沿和采集仍保持完整。
+	 * 过滤影响 OnGlobalKeyEvent 与 Global Input Action Event 的
+	 * Started/Triggered；已开始动作的 Completed 不受影响；
+	 * 状态查询、帧边沿和采集仍保持完整，修饰键状态也不受影响。
 	 */
 	UFUNCTION(BlueprintCallable, Category="Global Input|Filter")
 	void SetGlobalInputEventFilter(

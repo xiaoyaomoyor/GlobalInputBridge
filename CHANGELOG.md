@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.2] - 2026-09-02
+
+- **Changed**: the key event filter (`Set Global Input Event Filter`) now also gates Global Input Action Event nodes — filtered keys can no longer start actions (Started) and active actions stop receiving Triggered. `Completed` is still emitted for actions that started before the filter was applied, so Started handlers are always closed out. Previously the filter only affected the `On Global Key Event` delegate.
+- Modifier-key state, state queries, and frame edges remain unaffected by filtering.
+
 ## [1.0.1] - 2026-08-27
 
 - Added a demo map (`Content/Demo/DemoMap`) with blueprint examples covering listening lifecycle, key state queries, mouse delta aim mirroring, the Global Input Action Event node, and event filtering.

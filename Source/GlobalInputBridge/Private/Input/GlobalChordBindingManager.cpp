@@ -99,6 +99,7 @@ void FGlobalChordBindingManager::ProcessKeyEvent(
 				Binding,
 				Binding.Definition.CompletedFunctionName,
 				EventInfo,
+				EGlobalChordInvocationPhase::Completed,
 				OutInvocations);
 			continue;
 		}
@@ -128,6 +129,7 @@ void FGlobalChordBindingManager::ProcessKeyEvent(
 			Binding,
 			Binding.Definition.StartedFunctionName,
 			EventInfo,
+			EGlobalChordInvocationPhase::Started,
 			OutInvocations);
 	}
 }
@@ -166,6 +168,7 @@ void FGlobalChordBindingManager::GatherTriggered(
 				Binding,
 				Binding.Definition.CompletedFunctionName,
 				EventInfo,
+				EGlobalChordInvocationPhase::Completed,
 				OutInvocations);
 			continue;
 		}
@@ -180,6 +183,7 @@ void FGlobalChordBindingManager::GatherTriggered(
 			Binding,
 			Binding.Definition.TriggeredFunctionName,
 			EventInfo,
+			EGlobalChordInvocationPhase::Triggered,
 			OutInvocations);
 	}
 }
@@ -257,6 +261,7 @@ void FGlobalChordBindingManager::AddInvocation(
 	const FRuntimeBinding& Binding,
 	FName FunctionName,
 	const FGlobalChordEventInfo& EventInfo,
+	EGlobalChordInvocationPhase Phase,
 	TArray<FGlobalChordInvocation>& OutInvocations)
 {
 	if (FunctionName.IsNone())
@@ -270,6 +275,7 @@ void FGlobalChordBindingManager::AddInvocation(
 	Invocation.BindingId = Binding.Definition.BindingId;
 	Invocation.FunctionName = FunctionName;
 	Invocation.EventInfo = EventInfo;
+	Invocation.Phase = Phase;
 }
 
 void FGlobalChordBindingManager::RemoveInvalidTargets()

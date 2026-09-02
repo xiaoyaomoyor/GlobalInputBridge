@@ -1,7 +1,7 @@
 # Global Input Bridge
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.7-313131?logo=unrealengine)](https://unrealengine.com) [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-0078D6?logo=windows11)](https://learn.microsoft.com/windows/)
-[![Version](https://img.shields.io/badge/Version-1.0.1-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
+[![Version](https://img.shields.io/badge/Version-1.0.2-brightgreen)](CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/stargazers) [![Forks](https://img.shields.io/github/forks/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/network/members) [![Issues](https://img.shields.io/github/issues/xiaoyaomoyor/GlobalInputBridge)](https://github.com/xiaoyaomoyor/GlobalInputBridge/issues)
 
 > **Vibe-Coding Disclosure**: The development of this plugin was assisted by AI-assisted programming (vibe coding).
 
@@ -23,7 +23,7 @@ It is built for workflows where UE is a companion app running behind a foregroun
 - **Global Input Action Event** blueprint node with an Enhanced-Input-like lifecycle (`Started` / `Triggered` / `Completed`), modifier chords, and optional exclusive modifier matching — no manual Bind/Unbind.
 - **State queries** — `Is Global Key Down`, `Was Global Key Pressed/Released This Frame`, `Get Pressed Global Keys`, modifier state.
 - **Broadcast events** — `On Global Key Event` and `On Global Mouse Move`.
-- **Event filtering** — allow-list or exclude-list that only affects event broadcasting, never state tracking.
+- **Event filtering** — allow-list or exclude-list that gates `On Global Key Event` broadcasts and the Started/Triggered phases of Global Input Action Events, never state tracking.
 - **Debugging** — `Get Global Input Debug Info` snapshot plus configurable log levels.
 - **Automation tests** for the state manager, chord binding manager, subsystem lifecycle, key mapping, and editor node compilation.
 
@@ -89,12 +89,12 @@ Configurable in `Project Settings > Plugins > Global Input Bridge`:
 
 ## Event Filtering
 
-`Set Global Input Event Filter` enables filtering for `On Global Key Event` only:
+`Set Global Input Event Filter` enables filtering for both `On Global Key Event` and Global Input Action Events:
 
 - `Exclude Mode = false` (default): Keys is an allow-list; an empty array stops all key event broadcasting.
 - `Exclude Mode = true`: Keys is an exclude-list; an empty array excludes nothing.
 
-Filtering never affects state queries, frame edges, or Global Input Action Event nodes. `Clear Global Input Event Filter` restores full broadcasting.
+Filtered keys broadcast no events and can no longer start actions (Started); actions that were already active stop receiving `Triggered`, but their `Completed` is still emitted so blueprint Started handlers are always closed out. Filtering never affects state queries, frame edges, or modifier state. `Clear Global Input Event Filter` restores full broadcasting.
 
 ![Event Filtering](Images/GlobalInputBridge_Shot05.png)
 

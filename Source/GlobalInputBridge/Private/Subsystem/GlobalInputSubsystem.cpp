@@ -880,12 +880,24 @@ bool UGlobalInputSubsystem::ShouldBroadcastKeyEvent(
 void UGlobalInputSubsystem::BroadcastKeyEvent(
 	const FGlobalKeyEvent& KeyEvent)
 {
-	if (ShouldBroadcastKeyEvent(KeyEvent.Key))
+	const bool bAllowedByFilter = ShouldBroadcastKeyEvent(KeyEvent.Key);
+
+	if (bAllowedByFilter)
 	{
 		OnGlobalKeyEvent.Broadcast(KeyEvent);
 	}
 
-	ProcessGlobalChordKeyEvent(KeyEvent);
+	/*
+	 * 事件过滤同样作用于 Global Input Action Event：
+	 * 被过滤键的 Pressed 不进入组合键处理，无法触发新的 Started；
+	 * Released 仍放行，保证过滤前已开始的动作立即收到 Completed，
+	 * 否则蓝图侧 Started 无人收尾。
+	 */
+	if (bAllowedByFilter ||
+		KeyEvent.EventType == EGlobalInputEventType::Released)
+	{
+		ProcessGlobalChordKeyEvent(KeyEvent);
+	}
 }
 
 void UGlobalInputSubsystem::ProcessGlobalChordKeyEvent(
@@ -916,6 +928,18 @@ void UGlobalInputSubsystem::TriggerActiveGlobalChords()
 		Impl->StateManager,
 		FPlatformTime::Seconds(),
 		Invocations);
+
+	// 被过滤键的活动动作不再触发 Triggered；
+	// Completed 必须放行，负责收尾过滤前已开始的动作。
+	Invocations.RemoveAllSwap(
+		[this](const FGlobalChordInvocation& Invocation)
+		{
+			return Invocation.Phase ==
+					EGlobalChordInvocationPhase::Triggered &&
+				!ShouldBroadcastKeyEvent(Invocation.EventInfo.Key);
+		},
+		EAllowShrinking::No);
+
 	InvokeChordCallbacks(Invocations);
 }
 
