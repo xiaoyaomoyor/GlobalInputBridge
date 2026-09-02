@@ -549,6 +549,17 @@ TArray<FKey> UGlobalInputSubsystem::GetGlobalInputEventFilter() const
 	return Keys;
 }
 
+bool UGlobalInputSubsystem::IsGlobalKeyEventSuppressed(
+	FKey Key) const
+{
+	if (!Impl || !Key.IsValid())
+	{
+		return false;
+	}
+
+	return !ShouldBroadcastKeyEvent(Key);
+}
+
 void UGlobalInputSubsystem::RegisterGlobalChordBinding(
 	UObject* Target,
 	const FGlobalChordBlueprintBinding& Binding)

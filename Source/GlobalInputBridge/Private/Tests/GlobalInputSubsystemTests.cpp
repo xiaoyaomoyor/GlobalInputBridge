@@ -77,6 +77,10 @@ bool FGlobalInputSubsystemLifecycleTest::RunTest(
 		Subsystem->IsGlobalInputEventFilterExcludeMode());
 	TestEqual(TEXT("Event filter removes duplicates and invalid keys"),
 		Subsystem->GetGlobalInputEventFilter().Num(), 1);
+	TestFalse(TEXT("Allow-listed key is not suppressed"),
+		Subsystem->IsGlobalKeyEventSuppressed(EKeys::W));
+	TestTrue(TEXT("Key outside allow list is suppressed"),
+		Subsystem->IsGlobalKeyEventSuppressed(EKeys::E));
 	const FGlobalInputDebugInfo FilteredDebugInfo =
 		Subsystem->GetGlobalInputDebugInfo();
 	TestTrue(TEXT("Debug snapshot reports event filter"),
@@ -89,6 +93,10 @@ bool FGlobalInputSubsystemLifecycleTest::RunTest(
 	Subsystem->SetGlobalInputEventFilter({EKeys::Escape}, true);
 	TestTrue(TEXT("Event filter supports exclude-list mode"),
 		Subsystem->IsGlobalInputEventFilterExcludeMode());
+	TestTrue(TEXT("Excluded key reports suppressed"),
+		Subsystem->IsGlobalKeyEventSuppressed(EKeys::Escape));
+	TestFalse(TEXT("Non-excluded key reports not suppressed"),
+		Subsystem->IsGlobalKeyEventSuppressed(EKeys::W));
 	const FGlobalInputDebugInfo ExcludedDebugInfo =
 		Subsystem->GetGlobalInputDebugInfo();
 	TestTrue(TEXT("Debug snapshot reports exclude-list mode"),
@@ -105,6 +113,8 @@ bool FGlobalInputSubsystemLifecycleTest::RunTest(
 		Subsystem->IsGlobalInputEventFilterEnabled());
 	TestFalse(TEXT("Clearing filter resets exclude-list mode"),
 		Subsystem->IsGlobalInputEventFilterExcludeMode());
+	TestFalse(TEXT("No key is suppressed after clearing filter"),
+		Subsystem->IsGlobalKeyEventSuppressed(EKeys::Escape));
 
 	Subsystem->StopListening();
 

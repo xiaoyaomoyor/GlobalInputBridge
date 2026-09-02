@@ -148,6 +148,16 @@ public:
 	UFUNCTION(BlueprintPure, Category="Global Input|Filter")
 	TArray<FKey> GetGlobalInputEventFilter() const;
 
+	/**
+	 * 查询指定键的事件当前是否被过滤器拦截。
+	 *
+	 * 状态查询（Is Global Key Down 等）不受过滤影响、始终反映物理按键；
+	 * 消费方若希望与事件过滤保持一致，请配合本函数使用：
+	 * IsGlobalKeyDown(Key) && !IsGlobalKeyEventSuppressed(Key)。
+	 */
+	UFUNCTION(BlueprintPure, Category="Global Input|Filter")
+	bool IsGlobalKeyEventSuppressed(FKey Key) const;
+
 	/** C++ runtime hook used by compiled Global Input Action Event bindings. */
 	void RegisterGlobalChordBinding(
 		UObject* Target,

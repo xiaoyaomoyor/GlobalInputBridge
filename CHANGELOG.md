@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2026-09-02
+
+- **Added**: `Is Global Key Event Suppressed(FKey)` blueprint query — reports whether a key's events are currently blocked by the event filter. State queries (`Is Global Key Down` etc.) intentionally ignore the filter and always reflect physical input; polling-style consumers such as movement mirroring can combine `Is Global Key Down(Key) AND NOT Is Global Key Event Suppressed(Key)` to honor the filter without corrupting global key state.
+- Extended subsystem automation tests to cover the new query in allow-list, exclude-list, and cleared states.
+
 ## [1.0.2] - 2026-09-02
 
 - **Changed**: the key event filter (`Set Global Input Event Filter`) now also gates Global Input Action Event nodes — filtered keys can no longer start actions (Started) and active actions stop receiving Triggered. `Completed` is still emitted for actions that started before the filter was applied, so Started handlers are always closed out. Previously the filter only affected the `On Global Key Event` delegate.
